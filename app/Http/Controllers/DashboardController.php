@@ -8,6 +8,11 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        return view('dashboard', ['user' => $request->user()]);
+        $user = $request->user();
+
+        return view('dashboard', [
+            'user'       => $user,
+            'membership' => $user->activeMembership,
+        ]);
     }
 }
