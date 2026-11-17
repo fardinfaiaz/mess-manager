@@ -29,4 +29,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function memberships()
+    {
+        return $this->hasMany(Membership::class);
+    }
+
+    // The one mess the user currently belongs to (or null)
+    public function activeMembership()
+    {
+        return $this->hasOne(Membership::class)->where('status', 'active');
+    }
+
+    public function joinRequests()
+    {
+        return $this->hasMany(JoinRequest::class);
+    }
 }
