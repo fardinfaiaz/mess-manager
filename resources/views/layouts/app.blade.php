@@ -17,6 +17,8 @@
         .flash { padding: 10px; border-radius: 4px; margin-bottom: 16px; }
         .flash-success { background: #e5f4e4; color: #1b5e20; }
         .flash-error { background: #fbebeb; color: #b00020; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; vertical-align: top; }
     </style>
 </head>
 <body>

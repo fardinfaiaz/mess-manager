@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessController;
 use App\Http\Middleware\EnsureManager;
+use App\Http\Controllers\RoomController;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
 
@@ -23,4 +24,11 @@ Route::middleware('auth')->group(function () {
     // Mess setup (Fardin)
     Route::get('/messes/create', [MessController::class, 'create'])->name('messes.create');
     Route::post('/messes', [MessController::class, 'store'])->name('messes.store');
+    // F8 Room roster (Fardin) - manager only
+    Route::middleware(EnsureManager::class)->group(function () {
+        Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+        Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
+        Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
+        Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
+    });
 });
