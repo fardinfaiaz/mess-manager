@@ -11,7 +11,17 @@ class DashboardController extends Controller
         $user = $request->user();
         $membership = $user->activeMembership;
 
+        // F14: active emergency alerts of the user's mess, shown as a banner
+        $activeAlerts = $membership
+            ? $membership->mess->emergencyAlerts()->active()->latest()->get()
+            : collect();
+        $acknowledgedIds = $membership
+            ? $membership->alertAcknowledgements()->pluck('emergency_alert_id')->all()
+            : [];
+
         return view('dashboard', [
+            'activeAlerts'    => $activeAlerts,
+            'acknowledgedIds' => $acknowledgedIds,
             'user'         => $user,
             'membership'   => $membership,
             'requests'     => $user->joinRequests()->with('mess')->latest()->take(5)->get(),

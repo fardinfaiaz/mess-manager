@@ -28,6 +28,11 @@ class Membership extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function alertAcknowledgements()
+    {
+        return $this->hasMany(AlertAcknowledgement::class);
+    }
+
     public function isManager(): bool
     {
         return $this->role === 'manager';
