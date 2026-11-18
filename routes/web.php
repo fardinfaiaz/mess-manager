@@ -8,6 +8,11 @@ use App\Http\Middleware\EnsureManager;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\JoinRequestController;
 use App\Http\Controllers\EmergencyAlertController;
+use App\Http\Controllers\DutyTradeRequestController;
+use App\Http\Controllers\TaskAssignmentController;
+use App\Http\Controllers\TaskTypeController;
+use App\Http\Middleware\EnsureActiveMembership;
+use App\Http\Middleware\EnsureManagerOrRoomLeader;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
 
@@ -54,5 +59,37 @@ Route::middleware('auth')->group(function () {
         Route::get('/join-requests', [JoinRequestController::class, 'index'])->name('join.index');
         Route::post('/join-requests/{joinRequest}/approve', [JoinRequestController::class, 'approve'])->name('join.approve');
         Route::post('/join-requests/{joinRequest}/reject', [JoinRequestController::class, 'reject'])->name('join.reject');
+    });
+
+    // F9 Household task assignment (Raziur)
+    Route::middleware(EnsureActiveMembership::class)->group(function () {
+        Route::get('/tasks', [TaskAssignmentController::class, 'index'])->name('tasks.index');
+        Route::post('/tasks/{taskAssignment}/progress', [TaskAssignmentController::class, 'updateProgress'])->name('tasks.progress');
+    });
+
+    Route::middleware(EnsureManagerOrRoomLeader::class)->group(function () {
+        Route::post('/tasks', [TaskAssignmentController::class, 'store'])->name('tasks.store');
+        Route::post('/tasks/{taskAssignment}/verify', [TaskAssignmentController::class, 'verify'])->name('tasks.verify');
+        Route::post('/tasks/{taskAssignment}/missed', [TaskAssignmentController::class, 'markMissed'])->name('tasks.missed');
+    });
+
+    Route::middleware(EnsureManager::class)->group(function () {
+        Route::get('/task-types', [TaskTypeController::class, 'index'])->name('task-types.index');
+        Route::post('/task-types', [TaskTypeController::class, 'store'])->name('task-types.store');
+        Route::put('/task-types/{taskType}', [TaskTypeController::class, 'update'])->name('task-types.update');
+        Route::post('/task-types/{taskType}/toggle', [TaskTypeController::class, 'toggle'])->name('task-types.toggle');
+    });
+
+    // F10 Task tracking and duty exchange (Raziur)
+    Route::middleware(EnsureActiveMembership::class)->group(function () {
+        Route::get('/duty-trades', [DutyTradeRequestController::class, 'index'])->name('duty-trades.index');
+        Route::post('/duty-trades', [DutyTradeRequestController::class, 'store'])->name('duty-trades.store');
+        Route::post('/duty-trades/{dutyTradeRequest}/accept', [DutyTradeRequestController::class, 'accept'])->name('duty-trades.accept');
+        Route::post('/duty-trades/{dutyTradeRequest}/reject', [DutyTradeRequestController::class, 'reject'])->name('duty-trades.reject');
+        Route::post('/duty-trades/{dutyTradeRequest}/cancel', [DutyTradeRequestController::class, 'cancel'])->name('duty-trades.cancel');
+    });
+
+    Route::middleware(EnsureManagerOrRoomLeader::class)->group(function () {
+        Route::post('/duty-trades/{dutyTradeRequest}/approve', [DutyTradeRequestController::class, 'approve'])->name('duty-trades.approve');
     });
 });
