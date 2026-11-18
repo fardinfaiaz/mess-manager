@@ -20,6 +20,7 @@
         table { width: 100%; border-collapse: collapse; margin-top: 12px; }
         th, td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; vertical-align: top; }
         .card { border: 1px solid #ddd; border-radius: 6px; padding: 14px; margin-top: 16px; }
+        .btn-sm { width: auto; padding: 5px 12px; margin-top: 6px; font-size: 13px; }
     </style>
 </head>
 <body>

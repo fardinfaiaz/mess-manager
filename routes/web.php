@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
         Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
         Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
+        Route::post('/rooms/assign', [RoomController::class, 'assignMember'])->name('rooms.assign');
+        Route::post('/rooms/{room}/leader', [RoomController::class, 'setLeader'])->name('rooms.leader');
 
         // F1 Join requests - manager side (Fardin)
         Route::get('/join-requests', [JoinRequestController::class, 'index'])->name('join.index');
