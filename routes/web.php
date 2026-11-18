@@ -13,6 +13,7 @@ use App\Http\Controllers\TaskAssignmentController;
 use App\Http\Controllers\TaskTypeController;
 use App\Http\Middleware\EnsureActiveMembership;
 use App\Http\Middleware\EnsureManagerOrRoomLeader;
+use App\Http\Controllers\NoticeController;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
 
@@ -41,6 +42,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/alerts', [EmergencyAlertController::class, 'index'])->name('alerts.index');
     Route::post('/alerts/{alert}/acknowledge', [EmergencyAlertController::class, 'acknowledge'])->name('alerts.acknowledge');
 
+    // F20 Notice board - all members (Labonno). 'archive' is declared before '{notice}' on purpose.
+    Route::get('/notices', [NoticeController::class, 'index'])->name('notices.index');
+    Route::get('/notices/archive', [NoticeController::class, 'archive'])->name('notices.archive');
+    Route::get('/notices/{notice}', [NoticeController::class, 'show'])->name('notices.show');
+
     // F8 Room roster (Fardin) - manager only
     Route::middleware(EnsureManager::class)->group(function () {
         Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
@@ -54,6 +60,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/alerts', [EmergencyAlertController::class, 'store'])->name('alerts.store');
         Route::get('/alerts/{alert}', [EmergencyAlertController::class, 'show'])->name('alerts.show');
         Route::post('/alerts/{alert}/resolve', [EmergencyAlertController::class, 'resolve'])->name('alerts.resolve');
+
+        // F20 Notice board - manager side (Labonno)
+        Route::post('/notices', [NoticeController::class, 'store'])->name('notices.store');
+        Route::get('/notices/{notice}/edit', [NoticeController::class, 'edit'])->name('notices.edit');
+        Route::put('/notices/{notice}', [NoticeController::class, 'update'])->name('notices.update');
+        Route::delete('/notices/{notice}', [NoticeController::class, 'destroy'])->name('notices.destroy');
+        Route::post('/notices/{notice}/pin', [NoticeController::class, 'togglePin'])->name('notices.pin');
 
         // F1 Join requests - manager side (Fardin)
         Route::get('/join-requests', [JoinRequestController::class, 'index'])->name('join.index');

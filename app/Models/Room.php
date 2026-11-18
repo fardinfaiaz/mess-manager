@@ -13,6 +13,11 @@ class Room extends Model
         return $this->belongsTo(Mess::class);
     }
 
+    public function notices()
+    {
+        return $this->hasMany(Notice::class);
+    }
+
     // People currently living in this room
     public function activeMembers()
     {

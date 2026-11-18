@@ -32,6 +32,12 @@ class Mess extends Model
     {
         return $this->hasMany(EmergencyAlert::class);
     }
+
+    public function notices()
+    {
+        return $this->hasMany(Notice::class);
+    }
+
     // Total free seats across all rooms (business rule lives in the model)
     public function vacantSeats(): int
     {
