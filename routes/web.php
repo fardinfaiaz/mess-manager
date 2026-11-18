@@ -7,6 +7,7 @@ use App\Http\Controllers\MessController;
 use App\Http\Middleware\EnsureManager;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\JoinRequestController;
+use App\Http\Controllers\EmergencyAlertController;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
 
@@ -31,6 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/messes', [JoinRequestController::class, 'search'])->name('messes.search');
     Route::post('/messes/{mess}/join', [JoinRequestController::class, 'store'])->name('join.store');
 
+    // F14 Emergency announcements - all members (Labonno)
+    Route::get('/alerts', [EmergencyAlertController::class, 'index'])->name('alerts.index');
+    Route::post('/alerts/{alert}/acknowledge', [EmergencyAlertController::class, 'acknowledge'])->name('alerts.acknowledge');
+
     // F8 Room roster (Fardin) - manager only
     Route::middleware(EnsureManager::class)->group(function () {
         Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
@@ -39,6 +44,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
         Route::post('/rooms/assign', [RoomController::class, 'assignMember'])->name('rooms.assign');
         Route::post('/rooms/{room}/leader', [RoomController::class, 'setLeader'])->name('rooms.leader');
+
+        // F14 Emergency announcements - manager side (Labonno)
+        Route::post('/alerts', [EmergencyAlertController::class, 'store'])->name('alerts.store');
+        Route::get('/alerts/{alert}', [EmergencyAlertController::class, 'show'])->name('alerts.show');
+        Route::post('/alerts/{alert}/resolve', [EmergencyAlertController::class, 'resolve'])->name('alerts.resolve');
 
         // F1 Join requests - manager side (Fardin)
         Route::get('/join-requests', [JoinRequestController::class, 'index'])->name('join.index');

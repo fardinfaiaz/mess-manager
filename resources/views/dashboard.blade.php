@@ -5,10 +5,26 @@
 @section('content')
     <h2>Welcome, {{ $user->name }}</h2>
 
+    @foreach ($activeAlerts as $alert)
+        <div style="background:#fff3cd;border:1px solid #e0a800;border-left:6px solid #b00020;border-radius:6px;padding:12px;margin-bottom:12px">
+            <strong>&#9888; {{ $alert->typeLabel() }}</strong>
+            <span style="font-size:13px;color:#555"> &middot; until {{ $alert->expires_at->format('d M, H:i') }}</span>
+            <p style="margin:6px 0">{!! nl2br(e($alert->message)) !!}</p>
+            @unless ($membership->isManager() || in_array($alert->id, $acknowledgedIds))
+                <form method="POST" action="{{ route('alerts.acknowledge', $alert) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-sm" style="margin-top:0">I have seen this</button>
+                </form>
+            @endunless
+        </div>
+    @endforeach
+
     @if ($membership)
         <p><strong>Mess:</strong> {{ $membership->mess->name }} ({{ $membership->mess->area }})</p>
         <p><strong>Your role:</strong> {{ ucfirst(str_replace('_', ' ', $membership->role)) }}</p>
         <p><strong>Room:</strong> {{ $membership->room?->name ?? 'Not assigned yet' }}</p>
+
+        <a class="btn" href="{{ route('alerts.index') }}">Emergency alerts</a>
 
         @if ($membership->isManager())
             <a class="btn" href="{{ route('rooms.index') }}">Manage rooms</a>
