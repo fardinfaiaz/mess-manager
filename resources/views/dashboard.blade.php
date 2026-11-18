@@ -38,6 +38,12 @@
             <a class="btn" href="{{ route('rooms.index') }}">Manage rooms</a>
             <a class="btn" href="{{ route('join.index') }}">Join requests ({{ $pendingCount }} pending)</a>
         @endif
+
+        {{-- F9 Household task assignment (Raziur) --}}
+        <a class="btn" href="{{ route('tasks.index') }}">Household tasks</a>
+
+        {{-- F10 Task tracking and duty exchange (Raziur) --}}
+        <a class="btn" href="{{ route('duty-trades.index') }}">Duty exchanges</a>
     @else
         <p>You are not part of a mess yet.</p>
         <a class="btn" href="{{ route('messes.search') }}">Find a mess to join</a>
