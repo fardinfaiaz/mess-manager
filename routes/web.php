@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessController;
 use App\Http\Middleware\EnsureManager;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\JoinRequestController;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
 
@@ -21,14 +22,25 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
     // Mess setup (Fardin)
     Route::get('/messes/create', [MessController::class, 'create'])->name('messes.create');
     Route::post('/messes', [MessController::class, 'store'])->name('messes.store');
+
+    // F1 Join requests - visitor side (Fardin)
+    Route::get('/messes', [JoinRequestController::class, 'search'])->name('messes.search');
+    Route::post('/messes/{mess}/join', [JoinRequestController::class, 'store'])->name('join.store');
+
     // F8 Room roster (Fardin) - manager only
     Route::middleware(EnsureManager::class)->group(function () {
         Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
         Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
         Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
         Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
+
+        // F1 Join requests - manager side (Fardin)
+        Route::get('/join-requests', [JoinRequestController::class, 'index'])->name('join.index');
+        Route::post('/join-requests/{joinRequest}/approve', [JoinRequestController::class, 'approve'])->name('join.approve');
+        Route::post('/join-requests/{joinRequest}/reject', [JoinRequestController::class, 'reject'])->name('join.reject');
     });
 });

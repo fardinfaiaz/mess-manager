@@ -27,4 +27,9 @@ class Mess extends Model
     {
         return $this->hasMany(JoinRequest::class);
     }
+    // Total free seats across all rooms (business rule lives in the model)
+    public function vacantSeats(): int
+    {
+        return $this->rooms->sum(fn ($room) => $room->vacantSeats());
+    }
 }

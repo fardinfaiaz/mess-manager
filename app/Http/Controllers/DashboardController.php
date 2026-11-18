@@ -9,10 +9,15 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $membership = $user->activeMembership;
 
         return view('dashboard', [
-            'user'       => $user,
-            'membership' => $user->activeMembership,
+            'user'         => $user,
+            'membership'   => $membership,
+            'requests'     => $user->joinRequests()->with('mess')->latest()->take(5)->get(),
+            'pendingCount' => $membership?->isManager()
+                ? $membership->mess->joinRequests()->where('status', 'pending')->count()
+                : 0,
         ]);
     }
 }
