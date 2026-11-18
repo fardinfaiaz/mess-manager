@@ -19,7 +19,14 @@ class DashboardController extends Controller
             ? $membership->alertAcknowledgements()->pluck('emergency_alert_id')->all()
             : [];
 
+        // F20: the latest current notices this user is allowed to read
+        $latestNotices = $membership
+            ? $membership->mess->notices()->visibleTo($membership)->current()
+                ->orderByDesc('pinned')->latest()->take(3)->get()
+            : collect();
+
         return view('dashboard', [
+            'latestNotices'   => $latestNotices,
             'activeAlerts'    => $activeAlerts,
             'acknowledgedIds' => $acknowledgedIds,
             'user'         => $user,

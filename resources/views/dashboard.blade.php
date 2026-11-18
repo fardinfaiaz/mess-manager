@@ -24,6 +24,14 @@
         <p><strong>Your role:</strong> {{ ucfirst(str_replace('_', ' ', $membership->role)) }}</p>
         <p><strong>Room:</strong> {{ $membership->room?->name ?? 'Not assigned yet' }}</p>
 
+        @if ($latestNotices->isNotEmpty())
+            <h3>Latest notices</h3>
+            @foreach ($latestNotices as $notice)
+                @include('notices._card', ['notice' => $notice])
+            @endforeach
+        @endif
+
+        <a class="btn" href="{{ route('notices.index') }}">Notice board</a>
         <a class="btn" href="{{ route('alerts.index') }}">Emergency alerts</a>
 
         @if ($membership->isManager())
