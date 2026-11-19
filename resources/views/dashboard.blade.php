@@ -44,6 +44,8 @@
 
         {{-- F10 Task tracking and duty exchange (Raziur) --}}
         <a class="btn" href="{{ route('duty-trades.index') }}">Duty exchanges</a>
+        {{-- F2 Utility and bazar expenses (Prithu) --}}
+        <a class="btn" href="{{ route('expenses.index') }}">Utility &amp; bazar expenses</a>
     @else
         <p>You are not part of a mess yet.</p>
         <a class="btn" href="{{ route('messes.search') }}">Find a mess to join</a>
