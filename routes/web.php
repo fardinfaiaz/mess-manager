@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\MealController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -105,6 +106,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(EnsureManagerOrRoomLeader::class)->group(function () {
         Route::post('/duty-trades/{dutyTradeRequest}/approve', [DutyTradeRequestController::class, 'approve'])->name('duty-trades.approve');
     });
+ 
     // F5 Daily meal on/off and guest meals (Prithu)
     Route::middleware(EnsureActiveMembership::class)->group(function () {
         Route::get('/meals', [MealController::class, 'index'])->name('meals.index');
@@ -113,3 +115,16 @@ Route::middleware('auth')->group(function () {
         Route::post('/meals/guest/{guestMeal}/cancel', [MealController::class, 'cancelGuest'])->name('meals.guest.cancel');
     });
 });
+
+    // F2 Utility and bazar expenses (Prithu)
+    Route::middleware(EnsureActiveMembership::class)->group(function () {
+        Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+        Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    });
+
+    Route::middleware(EnsureManager::class)->group(function () {
+        Route::post('/expenses/{expense}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
+        Route::post('/expenses/{expense}/reject', [ExpenseController::class, 'reject'])->name('expenses.reject');
+    });
+});
+ 
