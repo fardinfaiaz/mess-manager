@@ -44,6 +44,11 @@
 
         {{-- F10 Task tracking and duty exchange (Raziur) --}}
         <a class="btn" href="{{ route('duty-trades.index') }}">Duty exchanges</a>
+        {{-- F10 Task tracking and duty exchange (Raziur) --}}
+        <a class="btn" href="{{ route('duty-trades.index') }}">Duty exchanges</a>
+
+        {{-- F5 Daily meal on/off and guest meals (Prithu) --}}
+        <a class="btn" href="{{ route('meals.index') }}">Daily meals &amp; guests</a>
     @else
         <p>You are not part of a mess yet.</p>
         <a class="btn" href="{{ route('messes.search') }}">Find a mess to join</a>
