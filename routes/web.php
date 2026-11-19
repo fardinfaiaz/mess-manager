@@ -114,7 +114,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/meals/guest', [MealController::class, 'storeGuest'])->name('meals.guest.store');
         Route::post('/meals/guest/{guestMeal}/cancel', [MealController::class, 'cancelGuest'])->name('meals.guest.cancel');
     });
-});
+
 
     // F2 Utility and bazar expenses (Prithu)
     Route::middleware(EnsureActiveMembership::class)->group(function () {
