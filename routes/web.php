@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -104,5 +104,15 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware(EnsureManagerOrRoomLeader::class)->group(function () {
         Route::post('/duty-trades/{dutyTradeRequest}/approve', [DutyTradeRequestController::class, 'approve'])->name('duty-trades.approve');
+    });
+    // F2 Utility and bazar expenses (Prithu)
+    Route::middleware(EnsureActiveMembership::class)->group(function () {
+        Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+        Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    });
+
+    Route::middleware(EnsureManager::class)->group(function () {
+        Route::post('/expenses/{expense}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
+        Route::post('/expenses/{expense}/reject', [ExpenseController::class, 'reject'])->name('expenses.reject');
     });
 });
