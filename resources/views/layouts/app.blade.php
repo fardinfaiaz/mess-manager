@@ -29,6 +29,8 @@
         <div>
             @auth
                 <span>{{ auth()->user()->name }}</span>
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+                <a href="{{ route('expenses.index') }}">Expenses</a>
                 <form method="POST" action="{{ route('logout') }}" style="display:inline">
                     @csrf
                     <button type="submit">Log out</button>
